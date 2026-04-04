@@ -22,5 +22,5 @@ urlpatterns = [
     # path("ingredients/", include("ingredients.urls")),
     # path("recipes/", include("recipes.urls")),
     # path("meal-plans/", include("mealplans.urls")),
-    # path("", include("accounts.urls")),
+    path("", include("accounts.urls")),
 ]

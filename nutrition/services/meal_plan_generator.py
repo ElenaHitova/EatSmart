@@ -12,6 +12,7 @@ RECIPE_FK_BY_MEAL_TYPE = {
     "dinner": "dinner_recipe_id",
 }
 
+
 def used_recipe_ids(user, week_start_date, meal_type):
 
     past_plans = MealPlan.objects.filter(user=user)

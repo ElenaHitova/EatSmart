@@ -1,11 +1,11 @@
-from django.contrib.auth.models import User
-from django.db import models
 
+from django.db import models
+from accounts.models import AppUser
 from recipes.models import Recipe
 
 
 class MealPlan(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     week_start_date = models.DateField()
 
     breakfast_recipe = models.ForeignKey(

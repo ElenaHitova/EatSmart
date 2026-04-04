@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from accounts.models import AppUser
 
 
 class Recipe(models.Model):
@@ -19,7 +20,7 @@ class Recipe(models.Model):
     description = models.TextField()
     preparation_time = models.PositiveIntegerField()
     created_by = models.ForeignKey(
-        User,
+        AppUser,
         on_delete=models.CASCADE,
     )
     is_public = models.BooleanField(default=True)

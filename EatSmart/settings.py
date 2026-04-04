@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.context_processors.navigation',
             ],
         },
     },
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'EatSmart.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "EatSmart",
+        "NAME": "Eat_Smart",
         "USER": "postgres",
         "PASSWORD": "Sokol_1981",
         "HOST": "127.0.0.1",
@@ -131,3 +132,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "accounts.AppUser"
