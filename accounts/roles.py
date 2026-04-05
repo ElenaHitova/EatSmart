@@ -1,17 +1,16 @@
 from accounts.models import UserProfile
 
 
-def is_standard_user(user) -> bool:
-
+def can_manage_food_catalog(user) -> bool:
     if not user.is_authenticated:
         return False
+
     if user.is_superuser or user.is_staff:
-        return False
-    try:
-        profile = user.userprofile
-    except UserProfile.DoesNotExist:
         return True
-    return profile.role != "nutrition_coach"
+
+    profile = getattr(user, "userprofile", None)
+
+    return profile and profile.role == "nutrition_coach"
 
 
 def is_standard_user(user) -> bool:
