@@ -1,0 +1,172 @@
+:root {
+    --eat-bg: #fafafa;
+    --eat-green: #45c38d;
+    --eat-accent: #ffb84f;
+    --eat-text: #808080;
+}
+
+body.app-body {
+    color: var(--eat-text);
+    background-color: #fdfdfd;
+    background-image: linear-gradient(
+            rgba(255, 255, 255, 0.93) 0%,
+            rgba(255, 255, 255, 0.88) 45%,
+            rgba(255, 255, 255, 0.9) 100%
+        ),
+        url("../images/background_1.jpg");
+    background-size: 100% 100%, cover;
+    background-position: center center, center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    body.app-body {
+        background-attachment: scroll;
+    }
+}
+
+.app-main {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    align-items: stretch;
+    min-height: 0;
+}
+
+.app-main-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.app-main-container > * {
+    max-width: 100%;
+}
+
+.navbar-eat {
+    background: #fff;
+    border-bottom: 3px solid var(--eat-green);
+    box-shadow: 0 2px 8px rgba(69, 195, 141, 0.12);
+}
+
+.navbar-eat .nav-link {
+    color: var(--eat-text);
+    font-weight: 500;
+}
+
+.navbar-eat .nav-link:hover {
+    color: var(--eat-green);
+}
+
+.navbar-eat .navbar-brand {
+    color: var(--eat-text);
+    font-weight: 600;
+}
+
+.navbar-eat .navbar-brand-eat {
+    margin: 0;
+    padding: 0.45rem 1rem;
+    border-radius: 15px;
+    border: 2px solid rgba(69, 195, 141, 0.5);
+    background: linear-gradient(
+        145deg,
+        #fff 0%,
+        var(--eat-bg) 55%,
+        rgba(69, 195, 141, 0.08) 100%
+    );
+    box-shadow: 0 2px 12px rgba(69, 195, 141, 0.14);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.navbar-eat .navbar-brand-eat:hover {
+    border-color: var(--eat-green);
+    box-shadow: 0 3px 16px rgba(69, 195, 141, 0.22), 0 0 0 1px rgba(255, 184, 79, 0.25);
+}
+
+.navbar-eat .navbar-brand-logo {
+    display: block;
+    height: 3.75rem;
+    width: auto;
+    max-width: 16rem;
+    object-fit: contain;
+}
+
+.btn-eat,
+.btn-eat:focus {
+    background-color: var(--eat-accent);
+    color: #fff;
+    border: none;
+}
+
+.btn-eat:hover {
+    background-color: #e8a344;
+    color: #fff;
+}
+
+.navbar-eat .nav-auth-pill {
+    width: 9.25rem;
+    min-width: 9.25rem;
+    max-width: 9.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.card-eat {
+    border-radius: 15px;
+    border: 1px solid rgba(69, 195, 141, 0.35);
+    background-color: #fff;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 22px rgba(69, 195, 141, 0.1), 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.footer-eat {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(6px);
+    border-top: 2px solid var(--eat-green);
+    color: var(--eat-text);
+}
+
+.leaf-accent {
+    color: var(--eat-green);
+}
+
+h1,
+h2,
+h3,
+.card-title {
+    color: #5a5a5a;
+}
+
+.card-eat input[type="text"],
+.card-eat input[type="email"],
+.card-eat input[type="password"],
+.card-eat input[type="number"],
+.card-eat input[type="date"],
+.card-eat select,
+.card-eat textarea {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    color: #5a5a5a;
+    border: 1px solid rgba(69, 195, 141, 0.35);
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.card-eat .form-label {
+    color: #5a5a5a;
+}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Profile — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 32rem;">
+    <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+            <h1 class="card-title h3 mb-0"><i class="fa-solid fa-circle-user me-2 leaf-accent" aria-hidden="true"></i>Profile</h1>
+            <a class="btn btn-eat rounded-pill px-4" href="{% url 'profile_edit' %}">Edit profile</a>
+        </div>
+        <p class="text-muted small mb-4">{{ user.email }}</p>
+        {% if messages %}
+        <ul class="list-unstyled mb-4">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags|default:'success' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if profile %}
+        <div class="rounded-4 p-3 bg-white border" style="border-color: rgba(69,195,141,0.35) !important;">
+            <dl class="row mb-0 small">
+                <dt class="col-sm-5 text-muted">Account type</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_role_display|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Age</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.age|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Height (cm)</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.height|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Weight (kg)</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.weight|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Gender</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_gender_display|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Activity level</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_activity_level_display|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted mb-0">Dietary goal</dt>
+                <dd class="col-sm-7 mb-0">{{ profile.get_dietary_goal_display|default:"—" }}</dd>
+            </dl>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">You don’t have a saved health profile yet. Use <strong>Edit profile</strong> above to add your details.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

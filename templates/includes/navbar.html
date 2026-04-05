@@ -1,0 +1,54 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light navbar-eat py-2">
+    <div class="container">
+        <a class="navbar-brand navbar-brand-eat d-flex align-items-center me-3" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Eat Smart" class="navbar-brand-logo" decoding="async">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-eat btn-sm px-3 rounded-pill nav-auth-pill" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-eat btn-sm px-3 rounded-pill nav-auth-pill" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% elif nav_is_nutrition_coach %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-eat btn-sm px-3 rounded-pill">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-inline m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-eat btn-sm px-3 rounded-pill">Logout</button>
+                        </form>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Profile — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 32rem;">
+    <div class="card-body">
+        <h1 class="card-title h3 text-center mb-3"><i class="fa-solid fa-circle-user me-2 leaf-accent" aria-hidden="true"></i>Edit profile</h1>
+        {% if health_profile_complete %}
+        <p class="text-center mb-3"><a class="text-decoration-none" href="{% url 'profile' %}">← View profile</a></p>
+        {% endif %}
+        {% if messages %}
+        <ul class="list-unstyled mb-3">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags|default:'success' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p class="small rounded-3 p-3 mb-4" style="background: rgba(69,195,141,0.08); border: 1px solid rgba(69,195,141,0.25);">All fields below are required. Meal plans stay disabled until you save a complete profile.</p>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <ul class="text-danger small ps-3">{{ form.non_field_errors }}</ul>
+            {% endif %}
+            {% for field in form %}
+            <div class="mb-3">
+                {{ field.errors }}
+                <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="form-text small" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-eat rounded-pill px-4">Save profile</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
