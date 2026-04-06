@@ -24,8 +24,10 @@
                 {% elif nav_is_nutrition_coach %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
-
                     <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ingredients:list' %}"><i class="fa-solid fa-carrot me-1" aria-hidden="true"></i>Ingredients</a>
+                    </li>
                         <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>Profile</a>
                     </li>
                     <li class="nav-item">

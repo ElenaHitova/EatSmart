@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Ingredients — Eat Smart{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <h1 class="h3 mb-0"><i class="fa-solid fa-carrot me-2 leaf-accent" aria-hidden="true"></i>Ingredients</h1>
+    {% if can_manage_ingredients %}
+    <a class="btn btn-eat rounded-pill px-4" href="{% url 'ingredients:create' %}">Add Ingredient</a>
+    {% endif %}
+</div>
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto">
+    <div class="card-body">
+        {% if messages %}
+        <ul class="list-unstyled mb-3">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags|default:'success' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p class="text-muted small mb-3">Calories and protein are per 100 g.</p>
+        {% if ingredients %}
+        <div class="table-responsive">
+            <table class="table table-borderless align-middle mb-0">
+                <thead class="small text-muted border-bottom" style="border-color: rgba(69,195,141,0.25) !important;">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">kcal / 100g</th>
+                        <th scope="col">Protein / 100g</th>
+                        {% if can_manage_ingredients %}<th scope="col"></th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ing in ingredients %}
+                    <tr class="border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
+                        <td>{{ ing.name }}</td>
+                        <td>{{ ing.calories_per_100g }}</td>
+                        <td>{{ ing.protein_per_100g }}</td>
+                        {% if can_manage_ingredients %}
+                        <td class="text-nowrap">
+                            <a class="btn btn-eat btn-sm rounded-pill me-1" href="{% url 'ingredients:update' ing.pk %}">Edit Ingredient</a>
+                            <a class="btn btn-outline-danger btn-sm rounded-pill" href="{% url 'ingredients:delete' ing.pk %}">Delete Ingredient</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted mb-0">No ingredients yet.{% if can_manage_ingredients %} <a href="{% url 'ingredients:create' %}">Add the first one</a>.{% endif %}</p>
+        {% endif %}
+        {% if is_paginated %}
+        <p class="text-center small text-muted mt-3 mb-0">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
