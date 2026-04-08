@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load recipe_nutrition %}
+{% block title %}Recipes — Eat Smart{% endblock %}
+{% block content %}
+<div class="text-center mb-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3 mb-3">
+        <h1 class="h3 mb-0"><i class="fa-solid fa-bowl-food me-2 leaf-accent" aria-hidden="true"></i>Recipes</h1>
+        {% if can_manage_recipes %}
+            <a class="btn btn-eat rounded-pill px-4" href="{% url 'recipes:create' %}">Add New Recipe</a>
+        {% endif %}
+    </div>
+    <p class="text-muted small mb-0">
+        {% if user.is_authenticated %}
+            Browse all recipes in the application. <strong>Edit</strong> opens the full form (including ingredients). The card opens the recipe view.
+        {% else %}
+            Public recipes only. <a href="{% url 'login' %}">Log in</a> for meal plans, shopping lists, and more.
+        {% endif %}
+    </p>
+</div>
+{% if messages %}
+<ul class="list-unstyled mb-4">
+    {% for message in messages %}
+        <li class="alert alert-{{ message.tags|default:'info' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if recipes %}
+<div class="row g-4 justify-content-center">
+    {% for recipe in recipes %}
+    <div class="col-md-6 col-lg-4 d-flex justify-content-center">
+        <div class="card card-eat shadow-sm rounded-4 p-3 w-100" style="max-width: 22rem;">
+            {% if recipe.image %}
+            <a href="{% url 'recipes:detail' recipe.pk %}">
+                <img class="card-img-top rounded-3 object-fit-cover" src="{{ recipe.image.url }}" alt="" style="height: 10rem; width: 100%; object-fit: cover;">
+            </a>
+            {% else %}
+            <div class="rounded-3 bg-light d-flex align-items-center justify-content-center mb-2" style="height: 10rem;">
+                <i class="fa-solid fa-bowl-food fa-3x text-muted opacity-50" aria-hidden="true"></i>
+            </div>
+            {% endif %}
+            <div class="card-body px-1 pt-2 pb-0 text-center">
+                <h2 class="card-title h5">
+                    <a class="text-decoration-none text-secondary" href="{% url 'recipes:detail' recipe.pk %}">{{ recipe.title }}</a>
+                </h2>
+                <p class="card-text small text-muted mb-1">{{ recipe.get_type_display }} · {{ recipe.preparation_time }} min{% if recipe.is_public %} · Public{% else %} · Private{% endif %}</p>
+                <p class="card-text small mb-2">{% recipe_nutrition recipe %}</p>
+                {% if user.is_authenticated %}
+                    {% if recipe.created_by_id == user.id or can_manage_recipes %}
+                    <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+                        <a class="btn btn-eat btn-sm rounded-pill" href="{% url 'recipes:update' recipe.pk %}">Edit</a>
+                        <a class="btn btn-outline-secondary btn-sm rounded-pill" href="{% url 'recipes:ingredient_add' recipe.pk %}">Add ingredient</a>
+                        <a class="btn btn-outline-danger btn-sm rounded-pill" href="{% url 'recipes:delete' recipe.pk %}">Delete</a>
+                    </div>
+                    {% else %}
+                    <p class="small text-muted mb-0">by {{ recipe.created_by.email }}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-center text-muted">No recipes yet.{% if can_manage_recipes %} <a href="{% url 'recipes:create' %}">Create one</a>.{% endif %}</p>
+{% endif %}
+{% if is_paginated %}
+<nav class="mt-4 d-flex justify-content-center gap-2 small text-muted" aria-label="Recipe pagination">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

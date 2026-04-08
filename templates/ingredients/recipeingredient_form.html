@@ -1,16 +1,17 @@
 {% extends "base.html" %}
+{% load recipe_nutrition %}
 {% block title %}{{ heading }} — Eat Smart{% endblock %}
 {% block content %}
 <div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 36rem;">
     <div class="card-body">
         <p class="mb-3"><a class="text-decoration-none" href="{% url 'recipes:detail' recipe.pk %}">← Back to recipe</a></p>
         <h1 class="card-title h3 mb-3"><i class="fa-solid fa-carrot me-2 leaf-accent" aria-hidden="true"></i>{{ heading }}</h1>
-        {% if recipe.nutrition_summary %}
+        {% if recipe_nutrition %}
         <div class="rounded-4 p-3 mb-3" style="background: #fff; border: 1px solid rgba(69,195,141,0.35);" aria-label="Current estimated nutrition">
             <strong>Nutrition</strong> (from saved lines so far)
             <ul class="mb-0 mt-2 small ps-3">
-                <li>Approx. {{ recipe.nutrition_summary.calories_kcal }} kcal</li>
-                <li>Approx. {{ recipe.nutrition_summary.protein_g }}g protein</li>
+                <li>Approx. {{ recipe_nutrition.calories_kcal }} kcal</li>
+                <li>Approx. {{ recipe_nutrition.protein_g }}g protein</li>
             </ul>
         </div>
         {% endif %}
@@ -41,7 +42,7 @@
                 {% endif %}
             </div>
             {% endfor %}
-            {% if not has_ingredients %}
+            {% if has_ingredients %}
             <button type="submit" class="btn btn-eat rounded-pill px-4">{{ submit_label }}</button>
             {% endif %}
         </form>

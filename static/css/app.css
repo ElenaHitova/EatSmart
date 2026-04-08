@@ -47,7 +47,9 @@ body.app-body {
 }
 
 .app-main-container > * {
+    width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 .navbar-eat {
@@ -148,6 +150,202 @@ h2,
 h3,
 .card-title {
     color: #5a5a5a;
+}
+
+
+.recipe-form-page .page-intro {
+    font-size: 0.9rem;
+    color: var(--eat-text);
+    margin: 0 0 1.25rem;
+}
+
+.recipe-form-page .form-row {
+    margin-bottom: 1rem;
+}
+
+.recipe-form-page label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+    color: #5a5a5a;
+}
+
+.recipe-form-page .helptext {
+    font-size: 0.85rem;
+    color: var(--eat-text);
+    margin: 0.25rem 0 0;
+}
+
+.recipe-form-page .errorlist {
+    color: #b00020;
+    margin: 0.25rem 0 0;
+    padding-left: 1.1rem;
+    font-size: 0.9rem;
+}
+
+.recipe-form-page input,
+.recipe-form-page select,
+.recipe-form-page textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.6rem;
+    font-size: 1rem;
+    border: 1px solid rgba(69, 195, 141, 0.35);
+    border-radius: 8px;
+}
+
+.recipe-form-page input[type="file"] {
+    padding: 0.4rem 0;
+    border: none;
+}
+
+.recipe-form-page input[type="checkbox"] {
+    width: auto;
+}
+
+.recipe-form-page .check-row label {
+    display: inline;
+    font-weight: 500;
+    margin-left: 0.35rem;
+}
+
+.recipe-form-page .check-row input {
+    width: auto;
+    vertical-align: middle;
+}
+
+.recipe-form-page .ingredients-panel {
+    background: #fff;
+    border: 1px solid rgba(69, 195, 141, 0.35);
+    border-radius: 12px;
+    padding: 1rem 1rem 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.recipe-form-page .ingredients-panel h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+}
+
+.recipe-form-page .ing-scroll {
+    overflow-x: auto;
+    margin: 0 -0.25rem;
+}
+
+.recipe-form-page .ing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.recipe-form-page .ing-table th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--eat-text);
+    padding: 0.35rem 0.5rem 0.6rem;
+    border-bottom: 1px solid rgba(69, 195, 141, 0.25);
+}
+
+.recipe-form-page .ing-table td {
+    padding: 0.5rem 0.5rem 0.65rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #edf0f3;
+}
+
+.recipe-form-page .ing-table td.ing-actions {
+    width: 5.5rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.recipe-form-page .ing-table .cell-errors {
+    padding-top: 0;
+    border-bottom: none;
+}
+
+.recipe-form-page .ing-table input[type="number"] {
+    max-width: 8rem;
+}
+
+.recipe-form-page .ing-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.recipe-form-page .ing-remove input {
+    margin: 0;
+}
+
+.recipe-form-page .ing-remove label {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.recipe-form-page .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.recipe-form-page .nutrition-readonly {
+    margin: 0 0 1rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(69, 195, 141, 0.35);
+    font-size: 0.95rem;
+}
+
+.recipe-form-page .nutrition-readonly h2 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+}
+
+.recipe-form-page .nutrition-readonly ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.recipe-form-page .nutrition-readonly .hint {
+    font-size: 0.8rem;
+    color: var(--eat-text);
+    margin: 0.5rem 0 0;
+}
+
+.recipe-form-page .btn-add-row {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1px solid rgba(69, 195, 141, 0.45);
+    background: #fff;
+    color: var(--eat-text);
+    cursor: pointer;
+}
+
+.recipe-form-page .btn-add-row:hover {
+    background: rgba(69, 195, 141, 0.08);
+}
+
+.shopping-list-page tr.bought td:not(:first-child) {
+    color: #aaa;
+    text-decoration: line-through;
 }
 
 .card-eat input[type="text"],

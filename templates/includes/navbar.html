@@ -14,7 +14,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
                     </li>
-
+                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipes:list' %}"><i class="fa-solid fa-bowl-food me-1" aria-hidden="true"></i>Recipes</a>
+                    </li>
                     <li class="nav-item">
                         <a class="btn btn-eat btn-sm px-3 rounded-pill nav-auth-pill" href="{% url 'login' %}">Login</a>
                     </li>
@@ -28,6 +31,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ingredients:list' %}"><i class="fa-solid fa-carrot me-1" aria-hidden="true"></i>Ingredients</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipes:list' %}"><i class="fa-solid fa-bowl-food me-1" aria-hidden="true"></i>Recipes</a>
+                    </li>
+                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>Profile</a>
                     </li>
                     <li class="nav-item">
@@ -39,7 +46,9 @@
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
-
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'recipes:list' %}"><i class="fa-solid fa-bowl-food me-1" aria-hidden="true"></i>Recipes</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' %}"><i class="fa-solid fa-circle-user me-1" aria-hidden="true"></i>Profile</a>
                     </li>

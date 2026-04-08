@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Delete recipe — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 32rem;">
+    <div class="card-body text-center">
+        <h1 class="card-title h4 text-danger mb-3">Delete recipe</h1>
+        <p>Are you sure you want to delete <strong>{{ recipe.title }}</strong>? This cannot be undone.</p>
+        <form method="post" class="d-inline-flex flex-wrap gap-2 justify-content-center mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-eat rounded-pill">Yes, delete</button>
+            <a class="btn btn-outline-secondary rounded-pill" href="{% url 'recipes:detail' recipe.pk %}">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

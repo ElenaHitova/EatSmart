@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }} — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 recipe-form-page mx-auto" style="max-width: 42rem;">
+    <div class="card-body">
+        <h1 class="card-title h3 mb-2"><i class="fa-solid fa-bowl-food me-2 leaf-accent" aria-hidden="true"></i>{{ heading }}</h1>
+
+        {% if ingredient_formset %}
+        <p class="page-intro">Quantities are always in <strong>grams (g)</strong>. They drive meal-plan nutrition for this recipe.</p>
+        {% elif can_manage_recipes %}
+        <p class="page-intro">Use <strong>Edit</strong> on a recipe to add or change ingredient lines.</p>
+        {% endif %}
+
+        {% if object and object.pk and can_modify_recipe %}
+        <p class="mb-3"><a class="text-decoration-none" href="{% url 'recipes:detail' object.pk %}">← Back to recipe</a></p>
+        {% endif %}
+
+        {% if object and object.pk %}
+        {% if object.nutrition_summary %}
+        <div class="nutrition-readonly" aria-label="Estimated nutrition (saved recipe)">
+            <h2>Nutrition</h2>
+            <ul>
+                <li>Approx. {{ object.nutrition_summary.calories_kcal }} kcal</li>
+                <li>Approx. {{ object.nutrition_summary.protein_g }}g protein</li>
+            </ul>
+            <p class="hint">Based on saved ingredient lines. Save the form to refresh after you change foods or grams.</p>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% if messages %}
+        <ul class="list-unstyled mb-3">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags|default:'info' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" novalidate id="recipe-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <ul class="errorlist">{{ form.non_field_errors }}</ul>
+            {% endif %}
+
+            {% for field in form %}
+                {% if ingredient_formset and field.name == 'description' %}
+                <section id="recipe-ingredients" class="ingredients-panel" aria-labelledby="ingredients-heading">
+                    <h2 id="ingredients-heading">What goes in this dish</h2>
+                    {% if no_ingredients_in_db %}
+                    <p class="errorlist" style="margin-bottom:0;">No foods in your catalog yet. Add some under <a href="{% url 'ingredients:list' %}">Ingredients</a>, then return here. You can still save this recipe and attach foods later.</p>
+                    {% else %}
+                    <p class="helptext">Each line needs a food and a gram amount. <strong>+ Add row</strong> adds another line. <strong>Remove</strong> drops a line when you save.</p>
+
+                    {{ ingredient_formset.management_form }}
+                    {% if ingredient_formset.non_form_errors %}
+                    <ul class="errorlist">{{ ingredient_formset.non_form_errors }}</ul>
+                    {% endif %}
+
+                    <div class="ing-scroll">
+                        <table class="ing-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Food</th>
+                                    <th scope="col">Grams</th>
+                                    <th scope="col" class="ing-actions">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ingredient-lines">
+                                {% for line_form in ingredient_formset %}
+                                <tr class="ingredient-line">
+                                    <td>
+                                        {% for hidden in line_form.hidden_fields %}{{ hidden }}{% endfor %}
+                                        {{ line_form.ingredient.errors }}
+                                        <label class="sr-only" for="{{ line_form.ingredient.id_for_label }}">Food</label>
+                                        {{ line_form.ingredient }}
+                                    </td>
+                                    <td>
+                                        {{ line_form.quantity.errors }}
+                                        <label class="sr-only" for="{{ line_form.quantity.id_for_label }}">Grams</label>
+                                        {{ line_form.quantity }}
+                                    </td>
+                                    {% if ingredient_form_show_remove|default:True %}
+                                    <td class="ing-actions">
+                                        {% if line_form.DELETE %}
+                                        <div class="ing-remove check-row">
+                                            {{ line_form.DELETE }}
+                                            <label for="{{ line_form.DELETE.id_for_label }}">{{ line_form.DELETE.label }}</label>
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% if line_form.non_field_errors %}
+                                <tr class="cell-errors">
+                                    <td colspan="3">{{ line_form.non_field_errors }}</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="btn-row mt-2 mb-0">
+                        <button type="button" class="btn-add-row" id="add-ingredient-line">+ Add row</button>
+                    </p>
+
+                    <div id="ingredient-line-empty" hidden aria-hidden="true">
+                        <table><tbody><tr class="ingredient-line">
+                            {% with ef=ingredient_formset.empty_form %}
+                            <td>
+                                {% for hidden in ef.hidden_fields %}{{ hidden }}{% endfor %}
+                                <label class="sr-only" for="{{ ef.ingredient.id_for_label }}">Food</label>
+                                {{ ef.ingredient }}
+                            </td>
+                            <td>
+                                <label class="sr-only" for="{{ ef.quantity.id_for_label }}">Grams</label>
+                                {{ ef.quantity }}
+                            </td>
+                            <td class="ing-actions">
+                                {% if ef.DELETE %}
+                                <div class="ing-remove check-row">
+                                    {{ ef.DELETE }}
+                                    <label for="{{ ef.DELETE.id_for_label }}">{{ ef.DELETE.label }}</label>
+                                </div>
+                                {% endif %}
+                            </td>
+                            {% endwith %}
+                        </tr></tbody></table>
+                    </div>
+                    {% endif %}
+                </section>
+                {% endif %}
+
+                <div class="form-row{% if field.name == 'is_public' %} check-row{% endif %}">
+                    {{ field.errors }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p class="helptext">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-eat rounded-pill px-4 mt-3">{{ submit_label }}</button>
+        </form>
+
+        <nav class="mt-4 pt-3 border-top small" style="border-color: rgba(69,195,141,0.25) !important;">
+            <a class="text-decoration-none me-2" href="{% url 'recipes:list' %}">All recipes</a>
+            <span class="text-muted">·</span>
+{#            <a class="text-decoration-none mx-2" href="{% url 'mealplans:list' %}">Meal plans</a>#}
+            <span class="text-muted">·</span>
+{#            <a class="text-decoration-none ms-2" href="{% url 'shopping:list' %}">Shopping list</a>#}
+        </nav>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+{% if ingredient_formset and not has_ingredients %}
+<script>
+$("#add-ingredient-line").click(function () {
+    var idx = parseInt($("#id_recipeingredient_set-TOTAL_FORMS").val()) || 0;
+
+    var html = $("#ingredient-line-empty tr.ingredient-line")
+        .html()
+        .replace(/__prefix__/g, idx);
+
+    $("#ingredient-lines").append(
+        '<tr class="ingredient-line">' + html + '</tr>'
+    );
+
+    $("#id_recipeingredient_set-TOTAL_FORMS").val(idx + 1);
+});
+</script>
+{% endif %}
+{% endblock %}

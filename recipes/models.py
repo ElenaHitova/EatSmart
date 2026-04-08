@@ -1,6 +1,6 @@
 from django.db import models
-
 from accounts.models import AppUser
+
 
 
 class Recipe(models.Model):
@@ -40,5 +40,4 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
-
 
