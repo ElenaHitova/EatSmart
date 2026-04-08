@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Meal plan — {{ meal_plan.week_start_date }} — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 36rem;">
+    <div class="card-body">
+        <h1 class="card-title h3 mb-3"><i class="fa-solid fa-calendar-check me-2 leaf-accent" aria-hidden="true"></i>Week of {{ meal_plan.week_start_date }}</h1>
+        <p class="mb-4">
+            <a class="btn btn-eat btn-sm rounded-pill me-1" href="{% url 'mealplans:update' meal_plan.pk %}">Edit</a>
+            <a class="btn btn-outline-danger btn-sm rounded-pill" href="{% url 'mealplans:delete' meal_plan.pk %}">Delete</a>
+        </p>
+        <dl class="mb-0">
+            <dt class="small text-muted text-uppercase mt-3">Breakfast</dt>
+            <dd class="mb-0">
+                {% if meal_plan.breakfast_recipe %}
+                <a href="{% url 'recipes:detail' meal_plan.breakfast_recipe_id %}">{{ meal_plan.breakfast_recipe.title }}</a>
+                {% if meal_plan.breakfast_recipe.nutrition_summary %}<div class="small text-muted mt-1">Approx. {{ meal_plan.breakfast_recipe.nutrition_summary.calories_kcal }} kcal · {{ meal_plan.breakfast_recipe.nutrition_summary.protein_g }}g protein</div>{% endif %}
+                {% else %}<em>Not set</em>{% endif %}
+            </dd>
+            <dt class="small text-muted text-uppercase mt-3">Lunch</dt>
+            <dd class="mb-0">
+                {% if meal_plan.lunch_recipe %}
+                <a href="{% url 'recipes:detail' meal_plan.lunch_recipe_id %}">{{ meal_plan.lunch_recipe.title }}</a>
+                {% if meal_plan.lunch_recipe.nutrition_summary %}<div class="small text-muted mt-1">Approx. {{ meal_plan.lunch_recipe.nutrition_summary.calories_kcal }} kcal · {{ meal_plan.lunch_recipe.nutrition_summary.protein_g }}g protein</div>{% endif %}
+                {% else %}<em>Not set</em>{% endif %}
+            </dd>
+            <dt class="small text-muted text-uppercase mt-3">Dinner</dt>
+            <dd class="mb-0">
+                {% if meal_plan.dinner_recipe %}
+                <a href="{% url 'recipes:detail' meal_plan.dinner_recipe_id %}">{{ meal_plan.dinner_recipe.title }}</a>
+                {% if meal_plan.dinner_recipe.nutrition_summary %}<div class="small text-muted mt-1">Approx. {{ meal_plan.dinner_recipe.nutrition_summary.calories_kcal }} kcal · {{ meal_plan.dinner_recipe.nutrition_summary.protein_g }}g protein</div>{% endif %}
+                {% else %}<em>Not set</em>{% endif %}
+            </dd>
+        </dl>
+    </div>
+</div>
+{% endblock %}

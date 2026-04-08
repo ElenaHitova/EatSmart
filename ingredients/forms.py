@@ -53,7 +53,7 @@ class IngredientForm(forms.ModelForm):
         self.fields["protein_per_100g"].widget = forms.NumberInput(
             attrs={
                 **common,
-                "placeholder": "e.g. 13.2",
+                "placeholder": "example 16.9",
                 "min": 0,
                 "step": "any",
             }
