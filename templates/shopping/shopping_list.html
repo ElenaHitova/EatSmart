@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Shopping list — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto shopping-list-page">
+    <div class="card-body">
+        <h1 class="card-title h3 text-center mb-3"><i class="fa-solid fa-basket-shopping me-2 leaf-accent" aria-hidden="true"></i>Shopping list</h1>
+        <p class="text-muted small text-center mb-4">Built from <strong>all of your meal plans</strong>: every breakfast, lunch, and dinner recipe’s ingredients are merged. The same food in multiple recipes appears once with <strong>total grams</strong>.</p>
+        {% if messages %}
+        <ul class="list-unstyled mb-3">
+            {% for message in messages %}
+            <li class="alert alert-{{ message.tags|default:'info' }} mb-2 py-2 px-3 rounded-3">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if items %}
+        <form method="post" id="bought-form">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle">
+                    <thead class="small text-muted text-uppercase border-bottom" style="border-color: rgba(69,195,141,0.25) !important;">
+                        <tr>
+                            <th scope="col" style="width:2.5rem;">Got it</th>
+                            <th scope="col">Ingredient</th>
+                            <th scope="col">Quantity (g)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr class="{% if item.is_bought %}bought{% endif %} border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
+                            <td>
+                                <input class="form-check-input" type="checkbox" name="bought" value="{{ item.pk }}" id="item-{{ item.pk }}" {% if item.is_bought %}checked{% endif %}>
+                            </td>
+                            <td><label class="mb-0" for="item-{{ item.pk }}" style="cursor:pointer;">{{ item.ingredient.name }}</label></td>
+                            <td>{{ item.quantity|floatformat:"-2" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <button type="submit" name="save_bought" value="1" class="btn btn-outline-secondary rounded-pill">Save checkmarks</button>
+            </div>
+        </form>
+        <p class="text-muted small mt-3 mb-0">Updated {{ shopping_list.created_at }} · Use <strong>Regenerate</strong> after you change meal plans or recipes.</p>
+        {% else %}
+        <p class="text-center text-muted"><em>No shopping list yet.</em></p>
+        {% endif %}
+        <form method="post" class="mt-4 d-flex flex-wrap gap-2 justify-content-center">
+            {% csrf_token %}
+            <button type="submit" name="regenerate" value="1" class="btn btn-eat rounded-pill px-4">Regenerate from meal plans</button>
+        </form>
+        <p class="text-muted small text-center mt-3 mb-0">Regenerating replaces the list and clears checkmarks. Ingredient amounts are summed across every recipe linked from your plans.</p>
+    </div>
+</div>
+{% endblock %}

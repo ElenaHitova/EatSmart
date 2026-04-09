@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c39f91f-c13e-4c5d-b28f-8d1b0d8665d6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/mealplans/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mealplans/services.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mealplans/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shopping/services.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shopping/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/shopping/shopping_list.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/AvifImagePlugin.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/BdfFontFile.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/venv/Lib/site-packages/PIL/BlpImagePlugin.py" afterDir="false" />
@@ -5573,11 +5573,12 @@
       <change afterPath="$PROJECT_DIR$/venv/Scripts/sqlformat.exe" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/venv/Scripts/wheel.exe" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/venv/pyvenv.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/EatSmart.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/EatSmart.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EatSmart/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/EatSmart/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ingredients/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/ingredients/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mealplans/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/mealplans/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mealplans/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mealplans/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shopping/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopping/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shopping/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopping/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shopping/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/shopping/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/includes/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/navbar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/recipes/recipe_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/recipes/recipe_form.html" afterDir="false" />
     </list>
@@ -5638,6 +5639,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Python\Django Advanced\EatSmart\templates" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Python\Django Advanced\EatSmart\templates\registration" />
       <recent name="D:\Python\Django Advanced\EatSmart\templates\accounts" />
@@ -5694,6 +5698,8 @@
       <workItem from="1775604694770" duration="2143000" />
       <workItem from="1775675149508" duration="5115000" />
       <workItem from="1775686156878" duration="968000" />
+      <workItem from="1775687314681" duration="526000" />
+      <workItem from="1775766454116" duration="8297000" />
     </task>
     <servers />
   </component>
