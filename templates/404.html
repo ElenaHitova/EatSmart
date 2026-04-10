@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Page not found — Eat Smart{% endblock %}
+{% block content %}
+<div class="card card-eat shadow-sm rounded-4 p-4 p-md-5 mx-auto text-center border border-secondary border-opacity-25" style="max-width: 32rem;">
+    <div class="card-body">
+        <p class="text-muted small text-uppercase mb-2" style="letter-spacing: 0.06em;">Error 404</p>
+        <h1 class="card-title h3 mb-3"><i class="fa-solid fa-magnifying-glass leaf-accent me-2" aria-hidden="true"></i>We couldn’t find that page</h1>
+        <p class="card-text text-muted mb-4">
+            The address may be wrong, or the page may have been moved.
+            {% if request_path %}
+            <span class="d-block small mt-2 font-monospace text-break">“{{ request_path }}”</span>
+            {% endif %}
+        </p>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a class="btn btn-eat rounded-pill px-4" href="{% url 'home' %}">Home</a>
+            <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'recipes:list' %}">Recipes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

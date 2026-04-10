@@ -10,7 +10,7 @@ from .mixins import CanManageIngredientsMixin, user_can_manage_ingredients
 from .models import Ingredient, RecipeIngredient
 
 
-class IngredientListView(LoginRequiredMixin, CanManageIngredientsMixin, ListView):
+class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
     context_object_name = "ingredients"
     template_name = "ingredients/ingredient_list.html"
