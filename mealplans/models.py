@@ -1,13 +1,24 @@
-
 from django.db import models
 from accounts.models import AppUser
 from recipes.models import Recipe
 
 
 class MealPlan(models.Model):
+    class GenerationStatus(models.TextChoices):
+        PENDING = "pending", "Pending"
+        DONE = "done", "Done"
     user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
     week_start_date = models.DateField()
-
+    generation_status = models.CharField(
+        max_length=16,
+        choices=GenerationStatus.choices,
+        default=GenerationStatus.DONE,
+        db_index=True,
+    )
+    generation_notice = models.TextField(
+        blank=True,
+        help_text="Set by the background worker (warnings after target-based generation).",
+    )
     breakfast_recipe = models.ForeignKey(
         Recipe,
         on_delete=models.SET_NULL,

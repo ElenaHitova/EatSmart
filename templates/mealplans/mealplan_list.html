@@ -30,7 +30,12 @@
                 <tbody>
                     {% for plan in meal_plans %}
                     <tr class="border-bottom" style="border-color: rgba(0,0,0,0.06) !important;">
-                        <td><a class="text-decoration-none" href="{% url 'mealplans:detail' plan.pk %}">{{ plan.week_start_date }}</a></td>
+                        <td>
+                            <a class="text-decoration-none" href="{% url 'mealplans:detail' plan.pk %}">{{ plan.week_start_date }}</a>
+                            {% if plan.generation_status == 'pending' %}
+                            <span class="badge text-bg-warning ms-1">Generating...</span>
+                            {% endif %}
+                        </td>
                         <td class="small">{% if plan.breakfast_recipe %}<a href="{% url 'recipes:detail' plan.breakfast_recipe_id %}">{{ plan.breakfast_recipe.title }}</a>{% if plan.breakfast_recipe.nutrition_summary %}<br><span class="text-muted">~{{ plan.breakfast_recipe.nutrition_summary.calories_kcal }} kcal / {{ plan.breakfast_recipe.nutrition_summary.protein_g }}g prot.</span>{% endif %}{% else %}—{% endif %}</td>
                         <td class="small">{% if plan.lunch_recipe %}<a href="{% url 'recipes:detail' plan.lunch_recipe_id %}">{{ plan.lunch_recipe.title }}</a>{% if plan.lunch_recipe.nutrition_summary %}<br><span class="text-muted">~{{ plan.lunch_recipe.nutrition_summary.calories_kcal }} kcal / {{ plan.lunch_recipe.nutrition_summary.protein_g }}g prot.</span>{% endif %}{% else %}—{% endif %}</td>
                         <td class="small">{% if plan.dinner_recipe %}<a href="{% url 'recipes:detail' plan.dinner_recipe_id %}">{{ plan.dinner_recipe.title }}</a>{% if plan.dinner_recipe.nutrition_summary %}<br><span class="text-muted">~{{ plan.dinner_recipe.nutrition_summary.calories_kcal }} kcal / {{ plan.dinner_recipe.nutrition_summary.protein_g }}g prot.</span>{% endif %}{% else %}—{% endif %}</td>

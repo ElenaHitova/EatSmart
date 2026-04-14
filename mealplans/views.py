@@ -12,7 +12,7 @@ from django.views.generic import (
 from accounts.roles import can_manage_food_catalog, is_standard_user
 from .forms import MealPlanForm
 from .models import MealPlan
-from .services import apply_target_based_recipes
+from .services import schedule_target_based_meal_plan_generation
 
 
 class MealPlanListView(LoginRequiredMixin, ListView):
@@ -65,27 +65,54 @@ class MealPlanDetailView(LoginRequiredMixin, DetailView):
             )
         )
 
-
-class MealPlanCreateView(LoginRequiredMixin, CreateView):
-    model = MealPlan
-    form_class = MealPlanForm
-    template_name = "mealplans/mealplan_form.html"
-    success_url = reverse_lazy("mealplans:list")
-
+class MealPlanFormMixin:
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
 
-    def form_valid(self, form):
+    def handle_generation(self, form, created=False):
         use_targets = form.cleaned_data.get("use_calculated_plan", False)
-        form.instance.user = self.request.user
-        response = super().form_valid(form)
+
         if use_targets:
-            apply_target_based_recipes(self.request, self.object, created=True)
+            form.instance.generation_status = MealPlan.GenerationStatus.PENDING
+            form.instance.generation_notice = ""
+
+        response = super().form_valid(form)
+
+        if use_targets:
+            mode = schedule_target_based_meal_plan_generation(self.object.pk)
+            self.object.refresh_from_db()
+
+            if mode == "queued":
+                messages.info(self.request, "Meal plan is being generated...")
+            elif self.object.generation_notice:
+                messages.warning(self.request, self.object.generation_notice)
+            else:
+                messages.success(
+                    self.request,
+                    "Meal plan created." if created
+                    else "Meal plan updated."
+                )
         else:
-            messages.success(self.request, "Meal plan created.")
+            messages.success(
+                self.request,
+                "Meal plan created." if created
+                else "Meal plan updated."
+            )
+
         return response
+
+
+class MealPlanCreateView(LoginRequiredMixin, MealPlanFormMixin, CreateView):
+    model = MealPlan
+    form_class = MealPlanForm
+    template_name = "mealplans/mealplan_form.html"
+    success_url = reverse_lazy("mealplans:list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return self.handle_generation(form, created=True)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -94,7 +121,7 @@ class MealPlanCreateView(LoginRequiredMixin, CreateView):
         return ctx
 
 
-class MealPlanUpdateView(LoginRequiredMixin, UpdateView):
+class MealPlanUpdateView(LoginRequiredMixin, MealPlanFormMixin, UpdateView):
     model = MealPlan
     form_class = MealPlanForm
     template_name = "mealplans/mealplan_form.html"
@@ -103,19 +130,8 @@ class MealPlanUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return MealPlan.objects.filter(user=self.request.user)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
-
     def form_valid(self, form):
-        use_targets = form.cleaned_data.get("use_calculated_plan", False)
-        response = super().form_valid(form)
-        if use_targets:
-            apply_target_based_recipes(self.request, self.object, created=False)
-        else:
-            messages.success(self.request, "Meal plan updated.")
-        return response
+        return self.handle_generation(form, created=False)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

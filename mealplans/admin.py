@@ -10,6 +10,7 @@ class MealPlanAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "week_start_date",
+        "generation_status",
         "breakfast_recipe",
         "lunch_recipe",
         "dinner_recipe",

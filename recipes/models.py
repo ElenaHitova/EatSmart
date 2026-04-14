@@ -41,3 +41,9 @@ class Recipe(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def nutrition_summary(self):
+
+        from nutrition.services.recipe_nutrition import get_recipe_nutrition_summary
+        return get_recipe_nutrition_summary(self)
+

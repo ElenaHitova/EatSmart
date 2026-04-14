@@ -11,10 +11,18 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    REDIS_URL=(str, "redis://127.0.0.1:6379/0"),
+)
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -23,9 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m%6+b+z5qu76s)3*s4*a_%c@!%$9@^m-b!&nsy!akzy@awv7)9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 
 # Application definition
@@ -44,6 +52,7 @@ INSTALLED_APPS = [
     'mealplans.apps.MealplansConfig',
     'shopping.apps.ShoppingConfig',
     'nutrition.apps.NutritionConfig',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.RequireCompleteHealthProfileMiddleware',
 ]
 
 ROOT_URLCONF = 'EatSmart.urls'
@@ -143,3 +153,24 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "accounts.AppUser"
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+}
+
+RQ_QUEUES = {
+    "default": {
+        "URL": env("REDIS_URL"),
+        "DEFAULT_TIMEOUT": 300,
+    },
+}
+
+RQ = {
+    "WORKER_CLASS": "EatSmart.workers.WindowsSimpleWorker",
+}
+
+RQ_SYNCHRONOUS_FALLBACK = env.bool("RQ_SYNCHRONOUS_FALLBACK", default=DEBUG)

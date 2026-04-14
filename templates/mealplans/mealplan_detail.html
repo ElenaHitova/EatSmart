@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Meal plan — {{ meal_plan.week_start_date }} — Eat Smart{% endblock %}
+{% block extra_head %}
+{% if meal_plan.generation_status == 'pending' %}
+<meta http-equiv="refresh" content="5">
+{% endif %}
+{% endblock %}
 {% block content %}
 <div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 36rem;">
     <div class="card-body">
         <h1 class="card-title h3 mb-3"><i class="fa-solid fa-calendar-check me-2 leaf-accent" aria-hidden="true"></i>Week of {{ meal_plan.week_start_date }}</h1>
+        {% if meal_plan.generation_status == 'pending' %}
+        <div class="alert alert-warning py-2 px-3 rounded-3 mb-3" role="status">
+            <strong>Generating...</strong> Meal plan is being generated. This page refreshes every few seconds until recipes are ready.
+        </div>
+        {% elif meal_plan.generation_notice %}
+        <div class="alert alert-warning py-2 px-3 rounded-3 mb-3" role="alert">{{ meal_plan.generation_notice }}</div>
+        {% endif %}
         <p class="mb-4">
             <a class="btn btn-eat btn-sm rounded-pill me-1" href="{% url 'mealplans:update' meal_plan.pk %}">Edit</a>
             <a class="btn btn-outline-danger btn-sm rounded-pill" href="{% url 'mealplans:delete' meal_plan.pk %}">Delete</a>
