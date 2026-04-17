@@ -30,7 +30,6 @@ urlpatterns = [
     path("api/recipes/", include("recipes.api_urls")),
     path("meal-plans/", include("mealplans.urls")),
     path("django-rq/", include("django_rq.urls")),
-    path("", include("accounts.urls")),
     path("shopping/", include("shopping.urls")),
 ]
 

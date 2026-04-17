@@ -6,7 +6,7 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from accounts.roles import can_manage_food_catalog
 from recipes.models import Recipe
 from .forms import IngredientForm, RecipeIngredientForm
-from .mixins import CanManageIngredientsMixin, user_can_manage_ingredients
+from .mixins import user_can_manage_ingredients, CanManageFoodMixin
 from .models import Ingredient, RecipeIngredient
 
 
@@ -25,7 +25,7 @@ class IngredientListView(LoginRequiredMixin, ListView):
         return ctx
 
 
-class IngredientCreateView(LoginRequiredMixin, CanManageIngredientsMixin, CreateView):
+class IngredientCreateView(LoginRequiredMixin, CanManageFoodMixin, CreateView):
     model = Ingredient
     form_class = IngredientForm
     template_name = "ingredients/ingredient_form.html"
@@ -42,7 +42,7 @@ class IngredientCreateView(LoginRequiredMixin, CanManageIngredientsMixin, Create
         return ctx
 
 
-class IngredientUpdateView(LoginRequiredMixin, CanManageIngredientsMixin, UpdateView):
+class IngredientUpdateView(LoginRequiredMixin, CanManageFoodMixin, UpdateView):
     model = Ingredient
     form_class = IngredientForm
     template_name = "ingredients/ingredient_form.html"
@@ -59,7 +59,7 @@ class IngredientUpdateView(LoginRequiredMixin, CanManageIngredientsMixin, Update
         return ctx
 
 
-class IngredientDeleteView(LoginRequiredMixin, CanManageIngredientsMixin, DeleteView):
+class IngredientDeleteView(LoginRequiredMixin, CanManageFoodMixin, DeleteView):
     model = Ingredient
     template_name = "ingredients/ingredient_confirm_delete.html"
     context_object_name = "ingredient"
@@ -70,7 +70,7 @@ class IngredientDeleteView(LoginRequiredMixin, CanManageIngredientsMixin, Delete
         return super().delete(request, *args, **kwargs)
 
 
-class RecipeIngredientCreateView(LoginRequiredMixin, CreateView):
+class RecipeIngredientCreateView(LoginRequiredMixin, CanManageFoodMixin, CreateView):
 
     model = RecipeIngredient
     form_class = RecipeIngredientForm

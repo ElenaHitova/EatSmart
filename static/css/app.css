@@ -92,12 +92,8 @@ body.app-body {
     box-shadow: 0 3px 16px rgba(69, 195, 141, 0.22), 0 0 0 1px rgba(255, 184, 79, 0.25);
 }
 
-.navbar-eat .navbar-brand-logo {
-    display: block;
-    height: 3.75rem;
-    width: auto;
-    max-width: 16rem;
-    object-fit: contain;
+.navbar-brand-eat .navbar-brand-logo {
+    height: 60px;
 }
 
 .btn-eat,

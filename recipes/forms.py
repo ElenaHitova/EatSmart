@@ -170,12 +170,8 @@ class RecipeIngredientLineForm(forms.ModelForm):
         cleaned = super().clean()
         ing = cleaned.get("ingredient")
         qty = cleaned.get("quantity")
-        if ing is None or not qty:
+        if ing is None and qty in (None, ""):
             return cleaned
-        if ing is None or not qty:
-            raise forms.ValidationError(
-                "Select a ingredient and enter grams, or clear the row.",
-            )
         if qty <= 0:
             raise forms.ValidationError(
                 "Use a gram amount greater than zero.",

@@ -13,7 +13,7 @@
         {% if user.is_authenticated %}
             Browse all recipes in the application. <strong>Edit</strong> opens the full form (including ingredients). The card opens the recipe view.
         {% else %}
-            Public recipes only. <a href="{% url 'login' %}">Log in</a> for meal plans, shopping lists, and more.
+            Public recipes only. Log in for meal plans, shopping lists, and more.
         {% endif %}
     </p>
 </div>

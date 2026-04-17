@@ -1,0 +1,47 @@
+## Eat Smart
+
+Eat Smart is a Django web application for healthy meal planning. Users maintain a health profile, build weekly meal plans (with optional background generation from calorie and protein targets), browse recipes, and aggregate shopping lists from their plans. Nutrition coaches and staff manage the shared ingredient catalog and recipes. Standard users consume that catalog for their own plans and create shopping list.
+
+
+## Technical information
+
+
+Framework -  Django 5.2
+API Django REST Framework 3.16|
+Database - PostgreSQL (via psycopg 3.x)
+Configuration - django-environ` (.env` file)
+Background queue - django-rq + Redis
+Media - Pillow for image uploads (e.g. recipe photos)
+
+All versions are listed in requirements.txt.
+
+
+## Project structure
+
+EatSmart/                 # Django project package
+  settings.py             # Installed apps, DB, RQ, REST_FRAMEWORK, AUTH_USER_MODEL
+  urls.py                 # Root URL routing
+  error_views.py          # Custom 500 handler
+  workers.py              # RQ worker class (Windows-friendly)
+accounts/                 # Custom user (AppUser), profile, auth URLs, middleware
+recipes/                  # Recipe models, views, forms, DRF API
+ingredients/              # Ingredient & recipe-line models, catalog views, API, mixins
+mealplans/                # Weekly meal plans, RQ job for target-based generation
+shopping/                 # Shopping lists derived from meal plans
+nutrition/                # Nutrition calculations and services (no ORM models)
+templates/                # Global templates, base layout, partials (navbar, footer)
+static/                   # CSS, images
+media/                    # User-uploaded files (created at runtime; not in git)
+manage.py
+requirements.txt
+README.md                 # This file
+
+
+##App capabilities
+
+accounts - Email-based AppUser, UserProfile, registration/login/logout, profile edit, navigation context, health-profile middleware
+recipes - Recipe CRUD (access controlled), recipe detail/list, recipe–ingredient lines, is_public visibility for anonymous users, recipe REST API
+ingredients - Ingredient catalog, RecipeIngredient links, CanManageFoodMixin, ingredient REST API
+mealplans - Per-user weekly plans, optional RQ-backed generation from targets
+shopping - Shopping list regeneration from meal plans, “bought” flags
+nutrition - Services including calculation of recipe calories and protein, meal-plan matching helpers with target goal for user and template tags

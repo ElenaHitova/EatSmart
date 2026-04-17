@@ -15,6 +15,7 @@ from django.views.generic import (
 )
 
 from accounts.roles import can_manage_food_catalog
+from ingredients.mixins import CanManageFoodMixin
 from ingredients.models import Ingredient, RecipeIngredient
 from .forms import RecipeForm, RecipeIngredientFormSet
 from .models import Recipe
@@ -83,7 +84,7 @@ class RecipeDetailView(DetailView):
         return ctx
 
 
-class RecipeCreateView(LoginRequiredMixin, CreateView):
+class RecipeCreateView(LoginRequiredMixin, CanManageFoodMixin, CreateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
@@ -128,7 +129,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
         return ctx
 
 
-class RecipeUpdateView(LoginRequiredMixin, UpdateView):
+class RecipeUpdateView(LoginRequiredMixin, CanManageFoodMixin, UpdateView):
     model = Recipe
     form_class = RecipeForm
     template_name = "recipes/recipe_form.html"
@@ -177,7 +178,7 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         return ctx
 
 
-class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+class RecipeDeleteView(LoginRequiredMixin, CanManageFoodMixin, DeleteView):
     model = Recipe
     template_name = "recipes/recipe_confirm_delete.html"
     success_url = reverse_lazy("recipes:list")
@@ -200,7 +201,7 @@ def _user_can_change_recipe(user, recipe: Recipe) -> bool:
     return recipe.created_by_id == user.id
 
 
-class RecipeIngredientLineDeleteView(LoginRequiredMixin, DeleteView):
+class RecipeIngredientLineDeleteView(LoginRequiredMixin, CanManageFoodMixin, DeleteView):
 
     model = RecipeIngredient
     template_name = "recipes/recipeingredient_confirm_delete.html"

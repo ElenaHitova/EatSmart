@@ -26,7 +26,7 @@
                 {% elif nav_is_nutrition_coach %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
-                    <li class="nav-item">
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ingredients:list' %}"><i class="fa-solid fa-carrot me-1" aria-hidden="true"></i>Ingredients</a>
                     </li>
@@ -51,11 +51,11 @@
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}"><i class="fa-solid fa-house me-1" aria-hidden="true"></i>Home</a>
-                     <li class="nav-item">
+                     </li>
                      <li class="nav-item">
                         <a class="nav-link" href="{% url 'ingredients:list' %}"><i class="fa-solid fa-carrot me-1" aria-hidden="true"></i>Ingredients</a>
                     </li>
-                    <li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'recipes:list' %}"><i class="fa-solid fa-bowl-food me-1" aria-hidden="true"></i>Recipes</a>
                     </li>
                     <li class="nav-item">

@@ -84,6 +84,18 @@ class RegisterForm(forms.Form):
 
 class LoginForm(AuthenticationForm):
 
+    def clean_username(self):
+        email = self.cleaned_data["username"].strip()
+        if not email:
+            return email
+        user = User.objects.filter(email__iexact=email).first()
+        if user is None:
+            raise forms.ValidationError(
+                "No account is registered with this email address.",
+                code="unknown_email",
+            )
+        return user.email
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].label = "Email"
@@ -225,7 +237,7 @@ class AppUserAdminCreationForm(BaseUserCreationForm):
 
     class Meta:
         model = AppUser
-        fields = (AppUser.USERNAME_FIELD,)
+        fields = (AppUser.USERNAME_FIELD,'password1','password2')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

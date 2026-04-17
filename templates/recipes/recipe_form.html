@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ heading }} — Eat Smart{% endblock %}
 {% block content %}
-<div class="card card-eat shadow-sm rounded-4 p-3 w-100" style="max-width: 22rem;">
+<div class="card card-eat shadow-sm rounded-4 p-3 w-100" style="max-width: 35rem;">
     <div class="card-body">
         <h1 class="card-title h3 mb-2"><i class="fa-solid fa-bowl-food me-2 leaf-accent" aria-hidden="true"></i>{{ heading }}</h1>
 
@@ -49,7 +49,7 @@
                     {% if no_ingredients_in_db %}
                     <p class="errorlist" style="margin-bottom:0;">No foods in your catalog yet. Add some under <a href="{% url 'ingredients:list' %}">Ingredients</a>, then return here. You can still save this recipe and attach foods later.</p>
                     {% else %}
-                    <p class="helptext">Each line needs a food and a gram amount. <strong>+ Add row</strong> adds another line. <strong>Remove</strong> drops a line when you save.</p>
+                    <p class="helptext">Each line needs an ingredient and a gram amount. <strong>+ Add row</strong> adds another line. <strong>Remove</strong> drops a line when you save.</p>
 
                     {{ ingredient_formset.management_form }}
                     {% if ingredient_formset.non_form_errors %}
@@ -60,7 +60,7 @@
                         <table class="ing-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Food</th>
+                                    <th scope="col">Ingredient</th>
                                     <th scope="col">Grams</th>
                                     <th scope="col" class="ing-actions">Remove</th>
                                 </tr>
@@ -71,7 +71,7 @@
                                     <td>
                                         {% for hidden in line_form.hidden_fields %}{{ hidden }}{% endfor %}
                                         {{ line_form.ingredient.errors }}
-                                        <label class="sr-only" for="{{ line_form.ingredient.id_for_label }}">Food</label>
+                                        <label class="sr-only" for="{{ line_form.ingredient.id_for_label }}">Ingredient</label>
                                         {{ line_form.ingredient }}
                                     </td>
                                     <td>
@@ -109,7 +109,7 @@
                             {% with ef=ingredient_formset.empty_form %}
                             <td>
                                 {% for hidden in ef.hidden_fields %}{{ hidden }}{% endfor %}
-                                <label class="sr-only" for="{{ ef.ingredient.id_for_label }}">Food</label>
+                                <label class="sr-only" for="{{ ef.ingredient.id_for_label }}">Ingredient</label>
                                 {{ ef.ingredient }}
                             </td>
                             <td>
@@ -144,13 +144,6 @@
             <button type="submit" class="btn btn-eat rounded-pill px-4 mt-3">{{ submit_label }}</button>
         </form>
 
-        <nav class="mt-4 pt-3 border-top small" style="border-color: rgba(69,195,141,0.25) !important;">
-            <a class="text-decoration-none me-2" href="{% url 'recipes:list' %}">All recipes</a>
-            <span class="text-muted">·</span>
-            <a class="text-decoration-none mx-2" href="{% url 'mealplans:list' %}">Meal plans</a>
-            <span class="text-muted">·</span>
-            <a class="text-decoration-none ms-2" href="{% url 'shopping:list' %}">Shopping list</a>
-        </nav>
     </div>
 </div>
 {% endblock %}
