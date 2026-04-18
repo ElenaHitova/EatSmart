@@ -24,21 +24,3 @@ def recipe_nutrition(recipe):
 
     return " · ".join(parts) if parts else "—"
 
-def user_nutrition(user):
-    nutrition_c = calculate_daily_calories(user)
-    nutrition_p = calculate_daily_protein(user)
-
-    calories = nutrition_c["calories_kcal"]
-    protein = nutrition_p["protein_g"]
-
-    parts = []
-
-    if calories > 0:
-        parts.append(f"~ {calories} kcal")
-
-    if protein > 0:
-        if float(protein).is_integer():
-            protein = int(protein)
-        parts.append(f"{protein} g protein")
-
-    return " · ".join(parts) if parts else "—"

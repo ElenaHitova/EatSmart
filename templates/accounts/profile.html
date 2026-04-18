@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load user_daily_targets %}
 {% block title %}Profile — Eat Smart{% endblock %}
 {% block content %}
 <div class="card card-eat shadow-sm rounded-4 p-3 p-md-4 mx-auto" style="max-width: 32rem;">
@@ -32,8 +32,13 @@
                 <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_gender_display|default:"—" }}</dd>
                 <dt class="col-sm-5 text-muted">Activity level</dt>
                 <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_activity_level_display|default:"—" }}</dd>
-                <dt class="col-sm-5 text-muted mb-0">Dietary goal</dt>
-                <dd class="col-sm-7 mb-0">{{ profile.get_dietary_goal_display|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted">Dietary goal</dt>
+                <dd class="col-sm-7 mb-3 mb-sm-2">{{ profile.get_dietary_goal_display|default:"—" }}</dd>
+                <dt class="col-sm-5 text-muted mb-0">Daily targets</dt>
+                {% user_daily_targets user as daily_targets %}
+                {% if daily_targets %}
+                    <dd class="col-sm-7 mb-0">{{ daily_targets }}</dd>
+                {% endif %}
             </dl>
         </div>
         {% else %}

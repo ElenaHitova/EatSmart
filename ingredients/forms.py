@@ -66,6 +66,14 @@ class IngredientForm(forms.ModelForm):
                 "Name cannot be empty or only spaces.",
                 code="name_blank",
             )
+        qs = Ingredient.objects.filter(name__iexact=name)
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError(
+                "An ingredient with this name already exists.",
+                code="duplicate_name",
+            )
         return name
 
     def clean_calories_per_100g(self):

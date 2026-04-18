@@ -1,47 +1,125 @@
-## Eat Smart
+# 1. Project overview
 
-Eat Smart is a Django web application for healthy meal planning. Users maintain a health profile, build weekly meal plans (with optional background generation from calorie and protein targets), browse recipes, and aggregate shopping lists from their plans. Nutrition coaches and staff manage the shared ingredient catalog and recipes. Standard users consume that catalog for their own plans and create shopping list.
+Project name: EatSmart
+
+Short description: Eat Smart is a Django web application for healthy meal planning. Users maintain a health profile, build weekly meal plans (with optional background generation from calorie and protein targets), browse recipes, and aggregate shopping lists from their plans. Nutrition coaches and staff manage the shared ingredient catalog and recipes. Standard users consume that catalog for their own plans and create shopping list.
+
+Main functionalities: User registration and email-based login; health profile (demographics, activity, dietary goal); weekly meal plans with optional background generation from targets; recipe browsing and management; ingredient catalog; shopping lists aggregated from meal plans with “bought” checkboxes; REST APIs for recipes and ingredients; optional Redis-backed job queue for meal-plan generation.
 
 
-## Technical information
 
+# 2. Technical information
 
 Framework -  Django 5.2
-API Django REST Framework 3.16|
+API Django REST Framework 3.16 for JSON APIs
 Database - PostgreSQL (via psycopg 3.x)
-Configuration - django-environ` (.env` file)
+Configuration - django-environ` (.env file)
 Background queue - django-rq + Redis
-Media - Pillow for image uploads (e.g. recipe photos)
+Media - Pillow for recipe image uploads
 
 All versions are listed in requirements.txt.
 
 
-## Project structure
 
-EatSmart/                 # Django project package
-  settings.py             # Installed apps, DB, RQ, REST_FRAMEWORK, AUTH_USER_MODEL
-  urls.py                 # Root URL routing
-  error_views.py          # Custom 500 handler
-  workers.py              # RQ worker class (Windows-friendly)
-accounts/                 # Custom user (AppUser), profile, auth URLs, middleware
-recipes/                  # Recipe models, views, forms, DRF API
-ingredients/              # Ingredient & recipe-line models, catalog views, API, mixins
-mealplans/                # Weekly meal plans, RQ job for target-based generation
-shopping/                 # Shopping lists derived from meal plans
-nutrition/                # Nutrition calculations and services (no ORM models)
-templates/                # Global templates, base layout, partials (navbar, footer)
-static/                   # CSS, images
-media/                    # User-uploaded files (created at runtime; not in git)
-manage.py
-requirements.txt
-README.md                 # This file
+# 3. Architecture
+
+Project structure: The Django project package is `EatSmart/` (`settings.py`, root `urls.py`, custom error handling, Windows-friendly RQ worker). Django apps are `accounts` (custom user and profile), `recipes`, `ingredients`, `mealplans`, `shopping`, and `nutrition`. Shared presentation lives under `templates/` and `static/`; user uploads go to `media/` at runtime.
+
+Separation of responsibilities: Models live in each app’s models.py. Views are class-based views and API views per app(ingredients and recipes). Templates are organized by app under templates. Business logic for nutrition and shopping is concentrated in service modules (for example nutrition/services/, shopping/services.py). The nutrition app holds no database models. It provides calculations, helpers, and template tags.
+
+Design patterns: Custom user model with email as the username field. UserPassesTestMixin-style access control and CanManageFoodMixin for catalog management. DRF custom permission class for write vs read on the ingredients API. Explicit through model (RecipeIngredient) for the many-to-many link between recipes and ingredients. Service layer for meal-plan generation and shopping-list regeneration. Optional asynchronous execution via RQ jobs with a synchronous fallback for simpler local setups.
 
 
-##App capabilities
 
-accounts - Email-based AppUser, UserProfile, registration/login/logout, profile edit, navigation context, health-profile middleware
-recipes - Recipe CRUD (access controlled), recipe detail/list, recipe–ingredient lines, is_public visibility for anonymous users, recipe REST API
-ingredients - Ingredient catalog, RecipeIngredient links, CanManageFoodMixin, ingredient REST API
-mealplans - Per-user weekly plans, optional RQ-backed generation from targets
-shopping - Shopping list regeneration from meal plans, “bought” flags
-nutrition - Services including calculation of recipe calories and protein, meal-plan matching helpers with target goal for user and template tags
+# 4. Database models
+
+AppUser (accounts): Extends Django’s abstract user, no username field, unique email is the login identifier. Standard Django flags apply (is_staff, is_superuser, etc.).
+
+UserProfile (accounts): One-to-one with AppUser. Stores role (standard or nutrition_coach), age, height, weight, gender, activity level, and dietary goal. These fields support nutrition targets and meal-plan generation.
+
+Recipe (recipes): Title, meal type (breakfast, lunch, dinner), description, preparation time, optional image, created_by (foreign key to `AppUser`), is_public for anonymous visibility, timestamps. Many-to-many to Ingredient through RecipeIngredient.
+
+Ingredient (ingredients): Name and per-100 g nutritional values (calories_per_100g, protein_per_100g) used to compute recipe and meal-plan nutrition.
+
+RecipeIngredient (ingredients): Join table: foreign keys to Recipe and Ingredient, plus quantity in grams for that recipe line.
+
+MealPlan (mealplans): Belongs to a user, unique per user and week_start_date. Three optional foreign keys to Recipe for breakfast, lunch, and dinner. Tracks generation_status and generation_notice for target-based auto-generation.
+
+ShoppingList (shopping): Belongs to a user with timestamped when created.
+
+ShoppingItem (shopping): Belongs to a ShoppingList, foreign key to Ingredient. Total quantity in grams with is_bought flag.
+
+Nutrition app: No ORM models in the app, logic is implemented in Python services and template tags.
+
+
+
+# 5. Authentication and authorization
+
+Registration, login, logout: Registration uses a dedicated view; login and logout use Django’s built-in class-based auth views with a custom login form. URLs are wired under the accounts app (home, dashboard, profile, register, login, logout).
+
+User roles: UserProfile.role distinguishes a standard user from a nutrition_coach. Django’s staff and superuser flags are also used. Catalog management is granted if the user is staff or superuser, or if their profile role is nutrition_coach (see accounts.roles.can_manage_food_catalog).
+
+Permissions and access restrictions: Ingredient and recipe create, update, and delete flows that affect the shared catalog are gated with CanManageFoodMixin and with chosen permissions in Django Administration created Groups for Nutrition coach and Standard user. The ingredients REST API allows safe methods for any authenticated user but restricts writes to users who can manage the catalog. Anonymous users only see recipes with is_public=True in list and detail querysets. Authenticated users see the full recipe queryset in those views. RequireCompleteHealthProfileMiddleware redirects authenticated non-staff users with an incomplete health profile to profile edit, with exemptions for home, auth routes, admin, and static/media paths.
+
+
+
+# 6. Core functionalities
+
+CRUD: Nutrition coaches and staff can manage ingredients and recipes. Recipe editing is also allowed for the recipe’s creator where implemented. Users manage their own meal plans and regenerate shopping lists tied to their account.
+
+Search and filtering: Recipe lists are ordered by meal type and recency. Pagination is applied (for example 20 items per page on the recipe list). APIs use DRF page-number pagination with a default page size of 20.
+
+Custom behavior: Meal plans can be filled using a generator that matches recipes to calorie and protein targets derived from the user profile. Work can run in-process when synchronous fallback is enabled, or via Redis and an RQ worker when not. Shopping lists combine ingredient quantities from the user’s meal plans. Template tags expose per-recipe nutrition and user daily targets on relevant pages.
+
+
+
+# 7. UI and UX
+
+CSS framework: Bootstrap 5.3 (CDN), plus Font Awesome 6.5 and a project stylesheet static/css/app.css.
+
+Responsive design: Yes. The base layout includes a viewport meta tag and Bootstrap’s responsive grid and components.
+
+
+
+# 8. Setup and installation
+
+</> Bash
+git clone ...
+cd project
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+Credentials from .env file:
+
+DJANGO_SECRET_KEY=#rci$-p%v-ngyh(r-bkt&+djqq9x$wcf^v!c&r-&@+n830f@_k
+DJANGO_DEBUG=True
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+
+DB_NAME=Eat_Smart
+DB_USER=postgres
+DB_PASSWORD=E@tSmart26
+DB_HOST=127.0.0.1
+DB_PORT=5432
+
+REDIS_URL=redis://127.0.0.1:6379/0
+RQ_SYNCHRONOUS_FALLBACK=True
+
+# True (default when DJANGO_DEBUG=True): meal-plan generation runs in the web process; no worker needed.
+# False: push jobs to Redis — run: python manage.py rqworker default
+
+
+
+# 9. Testing
+
+What is included: 23 automated tests cover role helpers, recipe visibility for anonymous vs authenticated users, recipe and ingredient API behavior, meal-plan ownership and generator logic, shopping-list generation, and nutrition calculation helpers. They live in each app’s tests.py
+
+Run them with: virtual environment active and the database configured run: python manage.py test
+
+
+
+# 10. Deployment
+
+This section will be added later (production hosting, environment hardening, static and media serving, HTTPS, and running RQ workers without synchronous fallback).
