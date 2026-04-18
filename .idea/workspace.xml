@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0c39f91f-c13e-4c5d-b28f-8d1b0d8665d6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EatSmart/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/EatSmart/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README" beforeDir="false" afterPath="$PROJECT_DIR$/README" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +151,7 @@
       <workItem from="1776447043187" duration="16451000" />
       <workItem from="1776506880117" duration="15000" />
       <workItem from="1776510377997" duration="5830000" />
-      <workItem from="1776520617822" duration="24514000" />
+      <workItem from="1776520617822" duration="25139000" />
     </task>
     <servers />
   </component>
