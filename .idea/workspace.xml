@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c39f91f-c13e-4c5d-b28f-8d1b0d8665d6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6f69e9a7-ec9a-4ab7-9b6f-5839b60831ea.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6f69e9a7-ec9a-4ab7-9b6f-5839b60831ea.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6f69e9a7-ec9a-4ab7-9b6f-5839b60831ea/storage_v2/_src_/database/Eat_Smart.4s338Q/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6f69e9a7-ec9a-4ab7-9b6f-5839b60831ea/storage_v2/_src_/database/Eat_Smart.4s338Q/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EatSmart/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/EatSmart/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README" beforeDir="false" afterPath="$PROJECT_DIR$/README" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +153,7 @@
       <workItem from="1776447043187" duration="16451000" />
       <workItem from="1776506880117" duration="15000" />
       <workItem from="1776510377997" duration="5830000" />
-      <workItem from="1776520617822" duration="17879000" />
+      <workItem from="1776520617822" duration="24514000" />
     </task>
     <servers />
   </component>

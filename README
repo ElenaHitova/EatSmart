@@ -1,6 +1,6 @@
 # 1. Project overview
 
-Project name: EatSmart
+Project name: EatSmart (https://eatsmart-api.onrender.com)
 
 Short description: Eat Smart is a Django web application for healthy meal planning. Users maintain a health profile, build weekly meal plans (with optional background generation from calorie and protein targets), browse recipes, and aggregate shopping lists from their plans. Nutrition coaches and staff manage the shared ingredient catalog and recipes. Standard users consume that catalog for their own plans and create shopping list.
 
@@ -105,10 +105,14 @@ DB_HOST=127.0.0.1
 DB_PORT=5432
 
 REDIS_URL=redis://127.0.0.1:6379/0
-RQ_SYNCHRONOUS_FALLBACK=True
+RQ_SYNCHRONOUS_FALLBACK=False
 
-# True (default when DJANGO_DEBUG=True): meal-plan generation runs in the web process; no worker needed.
-# False: push jobs to Redis — run: python manage.py rqworker default
+# True (default when DJANGO_DEBUG=True): meal-plan generation runs in the web process, no worker needed.
+# False:
+-   with docker run --name redis-local -p 6379:6379 -d redis:7-alpine
+-   Run the project python manage.py runserver
+-   push jobs to Redis and run: python manage.py rqworker default
+-   test meal plan generating and done status with refresh
 
 
 
@@ -120,6 +124,20 @@ Run them with: virtual environment active and the database configured run: pytho
 
 
 
-# 10. Deployment
+# 10. EatSmart API - Render Deployment Summary
 
-This section will be added later (production hosting, environment hardening, static and media serving, HTTPS, and running RQ workers without synchronous fallback).
+Production Hosting:
+Production URL: https://eatsmart-api.onrender.com
+Web App: eatsmart-api(Web Service)
+Database: Render PostgreSQL
+Redis/Worker: For free tier without workers, I use RQ_SYNCHRONOUS_FALLBACK = True
+
+Environment hardening:
+DEBUG = False
+ALLOWED_HOSTS = ['eatsmart-api.onrender.com']
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+Static and media serving:
+Static (CSS/JS)         WhiteNoise
+Media (user uploads)    Cloudinary
+

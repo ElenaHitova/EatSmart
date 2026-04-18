@@ -193,13 +193,10 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
 }
 
-if env('REDIS_URL', default=None):
-    RQ_QUEUES = {
-        "default": {
-            "URL": env("REDIS_URL"),
-            "DEFAULT_TIMEOUT": 300,
-        },
-    }
+ON_RENDER = os.environ.get('RENDER', False)
+
+if ON_RENDER:
+    RQ_SYNCHRONOUS_FALLBACK = True
 else:
     RQ_QUEUES = {
         "default": {
