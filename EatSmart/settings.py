@@ -16,7 +16,7 @@ import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 env = environ.Env(DEBUG=(bool, False))
@@ -95,6 +95,7 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "home"
 
+
 if env('DATABASE_URL', default=None):
 
     import dj_database_url
@@ -104,6 +105,7 @@ if env('DATABASE_URL', default=None):
             default=env('DATABASE_URL'),
             conn_max_age=600,
             conn_health_checks=True,
+            engine='django.db.backends.postgresql',
         )
     }
 else:
@@ -191,12 +193,20 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
 }
 
-RQ_QUEUES = {
-    "default": {
-        "URL": env("REDIS_URL"),
-        "DEFAULT_TIMEOUT": 300,
-    },
-}
+if env('REDIS_URL', default=None):
+    RQ_QUEUES = {
+        "default": {
+            "URL": env("REDIS_URL"),
+            "DEFAULT_TIMEOUT": 300,
+        },
+    }
+else:
+    RQ_QUEUES = {
+        "default": {
+            "URL": env("REDIS_URL"),
+            "DEFAULT_TIMEOUT": 300,
+        },
+    }
 
 RQ = {
     "WORKER_CLASS": "EatSmart.workers.WindowsSimpleWorker",
