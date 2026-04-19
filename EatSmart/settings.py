@@ -195,26 +195,36 @@ REST_FRAMEWORK = {
 
 ON_RENDER = os.environ.get('RENDER', False)
 
-if env('REDIS_URL', default=None) and not ON_RENDER:
+if ON_RENDER:
+
     RQ_QUEUES = {
         "default": {
             "URL": env("REDIS_URL"),
             "DEFAULT_TIMEOUT": 300,
         },
     }
+    RQ_SYNCHRONOUS_FALLBACK = False
 else:
-    RQ_QUEUES = {
+    if os.environ.get("REDIS_URL"):
+        RQ_QUEUES = {
+            "default": {
+                "URL": os.environ["REDIS_URL"],
+                "DEFAULT_TIMEOUT": 300,
+            },
+        }
+        RQ_SYNCHRONOUS_FALLBACK = False
+    else:
+        RQ_QUEUES = {
         "default": {
             "HOST": "localhost",
             "PORT": 6379,
             "DB": 0,
-        },
-    }
+            },
+        }
+        RQ_SYNCHRONOUS_FALLBACK = True
 
 RQ = {
     "WORKER_CLASS": "EatSmart.workers.WindowsSimpleWorker",
 }
-if ON_RENDER:
-    RQ_SYNCHRONOUS_FALLBAC=True
-else:
-    RQ_SYNCHRONOUS_FALLBACK = env.bool("RQ_SYNCHRONOUS_FALLBACK", default=DEBUG)
+
+

@@ -130,7 +130,7 @@ Production Hosting:
 Production URL: https://eatsmart-api.onrender.com
 Web App: eatsmart-api(Web Service)
 Database: Render PostgreSQL
-Redis/Worker: For free tier without workers, I use RQ_SYNCHRONOUS_FALLBACK = True
+Redis/Worker: eat-smart-redis, eat-smart-tworker
 
 Environment hardening:
 DEBUG = False
